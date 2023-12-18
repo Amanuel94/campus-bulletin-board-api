@@ -37,9 +37,6 @@ public class UsersController : ControllerBase
         return Ok(_mapper.Map<GeneralUserDto>(user));
     }
 
-
-
-
     [HttpPost]
     public async Task<ActionResult<GeneralUserDto>> CreateUserAsync([FromBody] CreateUserDto createUserDto)
     {
@@ -47,5 +44,30 @@ public class UsersController : ControllerBase
         await _userRepository.CreateAsync(user);
         var userDto = _mapper.Map<GeneralUserDto>(user);
         return CreatedAtAction(nameof(GetUserAsync), new { id = userDto.Id }, userDto);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<GeneralUserDto>> UpdateUserAsync(Guid id, [FromBody] UpdateUserDto updateUserDto)
+    {
+        var user = await _userRepository.GetAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        _mapper.Map(updateUserDto, user);
+        await _userRepository.UpdateAsync(user);
+        return Ok(_mapper.Map<GeneralUserDto>(user));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteUserAsync(Guid id)
+    {
+        var user = await _userRepository.GetAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        await _userRepository.RemoveAsync(user);
+        return NoContent();
     }
 }
