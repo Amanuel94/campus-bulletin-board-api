@@ -1,8 +1,8 @@
 namespace Board.User.Services.DTOs
 {
-    public record LoginResponseDto
+    public class LoginResponseDto
     {
-        public string Token { get; init; } = null!;
-        public string RefreshToken { get; init; } = null!;
+        public string Token { get; set; } = null!;
+        public string RefreshToken { get; set; } = null!;
     }
 }

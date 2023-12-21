@@ -1,5 +1,8 @@
 using Board.Common.Mongo;
 using Board.User.Services.Models;
+using Board.User.Services.Password;
+using Board.User.Services.PasswordService.Interfaces;
+using Board.User.Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddMongo()
                 .AddPersistence<User>("User");
+
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddAuth();
 // builder.Services.AddMassTransitHostedService();
 builder.Services.AddControllers(options => {
     options.SuppressAsyncSuffixInActionNames = false;
@@ -26,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -11,5 +11,6 @@ public record CreateUserDto
     public string PhoneNumber { get; init; } = null!;
     public string UserName { get; init; } = null!;
     public byte[]? Avatar { get; init; }
-    public string Password { get; init; } = null!;
+    public string PasswordHash { get; set; } = null!;
+
 }
