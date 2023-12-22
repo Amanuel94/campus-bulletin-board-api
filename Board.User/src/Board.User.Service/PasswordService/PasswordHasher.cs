@@ -35,7 +35,7 @@ namespace Board.User.Services.Password
 
             if (parts.Length != 3)
             {
-                throw new FormatException("Unexpected hash format.");
+                return false;
             }
 
             int iterations = Convert.ToInt32(parts[0]);

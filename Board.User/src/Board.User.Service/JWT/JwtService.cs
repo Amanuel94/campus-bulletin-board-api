@@ -26,7 +26,11 @@ public class JwtService : IJwtService
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),}),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Aud, _jwtSettings.Issuer),
+                new Claim(JwtRegisteredClaimNames.Iss, _jwtSettings.Issuer)
+                }),
 
             Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
             Issuer = _jwtSettings.Issuer,
@@ -35,6 +39,30 @@ public class JwtService : IJwtService
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    public bool IsTokenValid(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        byte[] key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
+        try
+        {
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _jwtSettings.Issuer,
+                ValidAudience = _jwtSettings.Issuer,
+                ValidateLifetime = true
+            }, out SecurityToken validatedToken);
+        }
+        catch
+        {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -12,5 +12,7 @@ public record CreateUserDto
     public string UserName { get; init; } = null!;
     public byte[]? Avatar { get; init; }
     public string PasswordHash { get; set; } = null!;
+    public DateTime CreatedDate { get; set; }
+    public DateTime ModifiedDate { get; set; }
 
 }

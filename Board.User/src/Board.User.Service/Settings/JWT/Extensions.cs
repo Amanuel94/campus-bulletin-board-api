@@ -26,7 +26,7 @@ public static class Extensions
                 {
                     ValidateIssuer = true,
                     ValidIssuer = _jwtSettings.Issuer,
-                    ValidateAudience = true,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
                     ValidateIssuerSigningKey = true,
