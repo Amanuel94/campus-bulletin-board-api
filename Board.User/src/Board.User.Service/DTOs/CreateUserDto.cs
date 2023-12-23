@@ -1,7 +1,7 @@
 using Board.User.Services.Models;
 
 namespace Board.User.Services.DTOs;
-public record CreateUserDto
+public class CreateUserDto : IUserDto
 {
     public string FirstName { get; init; } = null!;
     public string LastName { get; init; } = null!;

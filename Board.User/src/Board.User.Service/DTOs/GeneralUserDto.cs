@@ -1,6 +1,6 @@
 namespace Board.User.Services.DTOs;
 
-public class GeneralUserDto
+public class GeneralUserDto : IUserDto
 {
     public Guid Id { get; set; }
     public string UserName { get; set; } = null!;
