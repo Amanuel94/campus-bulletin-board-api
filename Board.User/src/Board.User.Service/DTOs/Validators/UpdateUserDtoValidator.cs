@@ -4,17 +4,12 @@ using FluentValidation;
 
 namespace Board.User.Service.DTOs.Validators;
 
-public class CreateUserDtoValidator : UserDataValidator<CreateUserDto>
+public class UpdateUserDtoValidator : UserDataValidator<UpdateUserDto>
 {
     private readonly IGenericRepository<Models.User> _userRepository;
-    public CreateUserDtoValidator(IGenericRepository<Models.User> userRepository)
+    public UpdateUserDtoValidator(IGenericRepository<Models.User> userRepository)
     {
         _userRepository = userRepository;
-
-        RuleFor(x => x.PasswordHash).NotEmpty().WithMessage("Password is required.")
-                                    .NotNull().WithMessage("Password cannot be null.")
-                                    .MaximumLength(20).WithMessage("Password cannot exceed 20 characters.")
-                                    .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
 
         RuleFor(x => x.UserName).Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage("Username is required.")
                                 .MaximumLength(50).WithMessage("Username cannot exceed 50 characters.")
@@ -34,8 +29,6 @@ public class CreateUserDtoValidator : UserDataValidator<CreateUserDto>
                                     return user == null;
                                 }).WithMessage("Email already exists.");
 
-        RuleFor(x => x.CreatedDate).NotEmpty().WithMessage("Created date is required.")
-                                  .NotNull().WithMessage("Created date cannot be null.");
 
         RuleFor(x => x.ModifiedDate).NotEmpty().WithMessage("Modified date is required.")
                                    .NotNull().WithMessage("Modified date cannot be null.");

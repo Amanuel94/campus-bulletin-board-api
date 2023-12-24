@@ -1,13 +1,15 @@
 using AutoMapper;
 using Board.Common.Interfaces;
-using Board.User.Services.DTOs;
-using Board.User.Services.Jwt;
-using Board.User.Services.Jwt.Interfaces;
-using Board.User.Services.PasswordService.Interfaces;
+using Board.Common.Responses;
+using Board.User.Service.DTOs;
+using Board.User.Service.DTOs.Validators;
+using Board.User.Service.Jwt;
+using Board.User.Service.Jwt.Interfaces;
+using Board.User.Service.PasswordService.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Board.User.Services.Controller;
+namespace Board.User.Service.Controller;
 
 
 [ApiController]
@@ -53,6 +55,14 @@ public class UsersController : ControllerBase
         createUserDto.PasswordHash = _passwordHasher.HashPassword(createUserDto.PasswordHash);
         createUserDto.CreatedDate = DateTime.UtcNow;
         createUserDto.ModifiedDate = DateTime.UtcNow;
+
+        var validator = new CreateUserDtoValidator(_userRepository);
+        var validationResult = await validator.ValidateAsync(createUserDto);
+        if (validationResult.IsValid == false)
+        {
+            return BadRequest(Response<GeneralUserDto>.Fail("Check your inputs", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
+        }
+
         var user = _mapper.Map<Models.User>(createUserDto);
         await _userRepository.CreateAsync(user);
         var userDto = _mapper.Map<GeneralUserDto>(user);
@@ -61,7 +71,7 @@ public class UsersController : ControllerBase
 
     [Authorize]
     [HttpPut()]
-    public async Task<ActionResult<GeneralUserDto>> UpdateUserAsync([FromBody] UpdateUserDto updateUserDto)
+    public async Task<ActionResult<Response<GeneralUserDto>>> UpdateUserAsync([FromBody] UpdateUserDto updateUserDto)
     {
         var identityProvider = new IdentityProvider(HttpContext, _jwtService);
         var id = identityProvider.GetUserId();
@@ -71,9 +81,16 @@ public class UsersController : ControllerBase
             return NotFound();
         }
         user.ModifiedDate = DateTime.UtcNow;
+        var validator = new UpdateUserDtoValidator(_userRepository);
+        var validationResult = await validator.ValidateAsync(updateUserDto);
+        if (validationResult.IsValid == false)
+        {
+            return BadRequest(Response<GeneralUserDto>.Fail("Check your inputs", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
+        }
         _mapper.Map(updateUserDto, user);
         await _userRepository.UpdateAsync(user);
-        return Ok(_mapper.Map<GeneralUserDto>(user));
+
+        return Ok(Response<GeneralUserDto>.Success(_mapper.Map<GeneralUserDto>(user)));
     }
 
 
@@ -95,14 +112,14 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequestDto loginRequestDto)
+    public async Task<ActionResult<Response<LoginResponseDto>>> LoginAsync(LoginRequestDto loginRequestDto)
     {
         var user = await _userRepository.GetAsync(x => x.UserName == loginRequestDto.UserName);
         if (user == null)
         {
             return NotFound();
         }
-        if (_passwordHasher.VerifyPassword(loginRequestDto.Password, user.PasswordHash) == false)
+        if (_passwordHasher.VerifyPassword(loginRequestDto.PasswordHash, user.PasswordHash) == false)
         {
             return Unauthorized();
         }
@@ -111,6 +128,27 @@ public class UsersController : ControllerBase
             RefreshToken = Guid.NewGuid().ToString(),
             Token = _jwtService.GenerateToken(user)
         };
-        return Ok(loginResponseDto);
+        return Ok(Response<LoginResponseDto>.Success(loginResponseDto));
+    }
+
+    [HttpPut]
+    [Route("change-password")]
+    public async Task<ActionResult<Response<int>>> ChangePasswordAsync(UpdatePasswordDto updatePasswordDto)
+    {
+        var identityProvider = new IdentityProvider(HttpContext, _jwtService);
+        var id = identityProvider.GetUserId();
+        var user = await _userRepository.GetAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        if (_passwordHasher.VerifyPassword(updatePasswordDto.CurrentPassword, user.PasswordHash) == false)
+        {
+            return Unauthorized(Response<int>.Fail("Current password is not correct", new List<string>()));
+        }
+        user.PasswordHash = _passwordHasher.HashPassword(updatePasswordDto.NewPassword);
+        user.ModifiedDate = DateTime.UtcNow;
+        await _userRepository.UpdateAsync(user);
+        return Ok(Response<GeneralUserDto>.Success(_mapper.Map<GeneralUserDto>(user)));
     }
 }

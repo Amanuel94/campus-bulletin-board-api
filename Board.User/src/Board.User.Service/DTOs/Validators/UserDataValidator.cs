@@ -1,7 +1,7 @@
-using Board.User.Services.Models;
+using Board.User.Service.Models;
 using FluentValidation;
 
-namespace Board.User.Services.DTOs.Validation;
+namespace Board.User.Service.DTOs.Validators;
 
 public class UserDataValidator<T> : AbstractValidator<T> where T : IUserDto
 {

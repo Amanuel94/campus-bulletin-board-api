@@ -1,12 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Board.User.Services.Jwt.Interfaces;
-using Board.User.Services.Settings;
+using Board.User.Service.Jwt.Interfaces;
+using Board.User.Service.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Board.User.Services.Jwt;
+namespace Board.User.Service.Jwt;
 
 public class JwtService : IJwtService
 {

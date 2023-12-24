@@ -1,8 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
-using Board.User.Services.Jwt.Interfaces;
+using Board.User.Service.Jwt.Interfaces;
 using Microsoft.Extensions.Primitives;
 
-namespace Board.User.Services.Jwt;
+namespace Board.User.Service.Jwt;
 
 public class IdentityProvider
 {

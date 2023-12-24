@@ -1,4 +1,4 @@
-namespace Board.User.Services.DTOs;
+namespace Board.User.Service.DTOs;
 
 public class UpdateUserDto : IUserDto
 {

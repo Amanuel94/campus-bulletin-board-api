@@ -1,4 +1,4 @@
-namespace Board.User.Services.PasswordService.Interfaces;
+namespace Board.User.Service.PasswordService.Interfaces;
 
 public interface IPasswordHasher
 {

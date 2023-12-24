@@ -1,4 +1,4 @@
-namespace Board.User.Services.Settings;
+namespace Board.User.Service.Settings;
 
 public class JWTSettings
 {

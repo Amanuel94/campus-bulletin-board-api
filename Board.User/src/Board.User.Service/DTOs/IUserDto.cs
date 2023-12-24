@@ -1,7 +1,6 @@
-using Board.User.Services.Models;
+using Board.User.Service.Models;
 
-namespace Board.User.Services.DTOs
-{
+namespace Board.User.Service.DTOs;
     public abstract class IUserDto
     {
         public string? FirstName { get; init; }
@@ -13,4 +12,3 @@ namespace Board.User.Services.DTOs
         public string? UserName { get; init; }
         public byte[]? Avatar { get; init; }
     }
-}

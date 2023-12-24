@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
-using Board.User.Services.PasswordService.Interfaces;
+using Board.User.Service.PasswordService.Interfaces;
 using Board.User.Services.Settings;
 using Microsoft.Extensions.Options;
 
-namespace Board.User.Services.Password
+namespace Board.User.Service.Password
 {
     public class PasswordHasher : IPasswordHasher
     {

@@ -1,4 +1,4 @@
-namespace Board.User.Services.Jwt.Interfaces
+namespace Board.User.Service.Jwt.Interfaces
 {
     public interface IJwtService
     {

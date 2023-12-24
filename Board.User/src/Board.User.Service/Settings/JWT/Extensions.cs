@@ -1,10 +1,10 @@
 using System.Text;
-using Board.User.Services.Jwt;
-using Board.User.Services.Jwt.Interfaces;
+using Board.User.Service.Jwt;
+using Board.User.Service.Jwt.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Board.User.Services.Settings;
+namespace Board.User.Service.Settings;
 
 public static class Extensions
 {

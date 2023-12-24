@@ -1,8 +1,8 @@
 using Board.Common.Mongo;
-using Board.User.Services.Models;
-using Board.User.Services.Password;
-using Board.User.Services.PasswordService.Interfaces;
-using Board.User.Services.Settings;
+using Board.User.Service.Models;
+using Board.User.Service.Password;
+using Board.User.Service.PasswordService.Interfaces;
+using Board.User.Service.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 using Board.Common.Models;
 
-namespace Board.User.Services.Models;
+namespace Board.User.Service.Models;
 public class User:BaseEntity
 {
     public required string FirstName { get; set; }

@@ -1,4 +1,4 @@
-namespace Board.User.Services.Models;
+namespace Board.User.Service.Models;
 
 public enum Department
 {
