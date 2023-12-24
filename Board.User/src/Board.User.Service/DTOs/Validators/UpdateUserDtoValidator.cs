@@ -15,18 +15,18 @@ public class UpdateUserDtoValidator : UserDataValidator<UpdateUserDto>
                                 .MaximumLength(50).WithMessage("Username cannot exceed 50 characters.")
                                 .MinimumLength(8).WithMessage("Username must be at least 8 characters long.")
                                 .Must(x => !x.Contains(" ")).WithMessage("Username cannot contain spaces.")
-                                .MustAsync(async (userName, cancellationToken) =>
+                                .MustAsync(async (x, userName, cancellationToken) =>
                                 {
                                     var user = await _userRepository.GetAsync(x=> x.UserName == userName);
-                                    return user == null;
+                                    return user ==  null || user.Id == x.Id;
                                 }).WithMessage("Username already exists.");
 
         RuleFor(x => x.Email).Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage("Email is required.")
                                 .EmailAddress().WithMessage("Email is not valid.")
-                                .MustAsync(async (email, cancellationToken) =>
+                                .MustAsync(async (x, email, cancellationToken) =>
                                 {
                                     var user = await _userRepository.GetAsync(x=> x.Email == email);
-                                    return user == null;
+                                    return user == null || user.Id == x.Id;
                                 }).WithMessage("Email already exists.");
 
 

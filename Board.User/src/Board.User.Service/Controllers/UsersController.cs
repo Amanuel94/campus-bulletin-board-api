@@ -52,10 +52,8 @@ public class UsersController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<GeneralUserDto>> CreateUserAsync([FromBody] CreateUserDto createUserDto)
     {
-        createUserDto.PasswordHash = _passwordHasher.HashPassword(createUserDto.PasswordHash);
         createUserDto.CreatedDate = DateTime.UtcNow;
         createUserDto.ModifiedDate = DateTime.UtcNow;
-
         var validator = new CreateUserDtoValidator(_userRepository);
         var validationResult = await validator.ValidateAsync(createUserDto);
         if (validationResult.IsValid == false)
@@ -63,6 +61,7 @@ public class UsersController : ControllerBase
             return BadRequest(Response<GeneralUserDto>.Fail("Check your inputs", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
         }
 
+        createUserDto.PasswordHash = _passwordHasher.HashPassword(createUserDto.PasswordHash);
         var user = _mapper.Map<Models.User>(createUserDto);
         await _userRepository.CreateAsync(user);
         var userDto = _mapper.Map<GeneralUserDto>(user);
@@ -78,9 +77,10 @@ public class UsersController : ControllerBase
         var user = await _userRepository.GetAsync(id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(Response<GeneralUserDto>.Fail("User not found", new List<string>()));
         }
-        user.ModifiedDate = DateTime.UtcNow;
+        updateUserDto.Id = id;
+        updateUserDto.ModifiedDate = DateTime.UtcNow;
         var validator = new UpdateUserDtoValidator(_userRepository);
         var validationResult = await validator.ValidateAsync(updateUserDto);
         if (validationResult.IsValid == false)
@@ -117,11 +117,11 @@ public class UsersController : ControllerBase
         var user = await _userRepository.GetAsync(x => x.UserName == loginRequestDto.UserName);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(Response<LoginResponseDto>.Fail("User not found", new List<string>()));
         }
-        if (_passwordHasher.VerifyPassword(loginRequestDto.PasswordHash, user.PasswordHash) == false)
+        if (_passwordHasher.VerifyPassword(loginRequestDto.Password, user.PasswordHash) == false)
         {
-            return Unauthorized();
+            return Unauthorized(Response<LoginResponseDto>.Fail("Password is not correct", new List<string>()));
         }
         var loginResponseDto = new LoginResponseDto()
         {

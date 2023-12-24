@@ -19,7 +19,7 @@ namespace Board.User.Service.DTOs.Validators
 
                 }).WithMessage("Username does not exist.");
 
-            RuleFor(request => request.PasswordHash)
+            RuleFor(request => request.Password)
                 .NotEmpty().WithMessage("Password is required.")
                 .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
         }

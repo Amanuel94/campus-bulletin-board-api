@@ -10,11 +10,11 @@ public class CreateUserDtoValidator : UserDataValidator<CreateUserDto>
     public CreateUserDtoValidator(IGenericRepository<Models.User> userRepository)
     {
         _userRepository = userRepository;
-
         RuleFor(x => x.PasswordHash).NotEmpty().WithMessage("Password is required.")
                                     .NotNull().WithMessage("Password cannot be null.")
-                                    .MaximumLength(20).WithMessage("Password cannot exceed 20 characters.")
-                                    .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
+                                    .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
+                                    .MaximumLength(20).WithMessage("Password cannot exceed 20 characters.");
+
 
         RuleFor(x => x.UserName).Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage("Username is required.")
                                 .MaximumLength(50).WithMessage("Username cannot exceed 50 characters.")
