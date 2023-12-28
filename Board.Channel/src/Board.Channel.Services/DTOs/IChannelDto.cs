@@ -1,0 +1,13 @@
+using Board.Channel.Service.Model;
+
+namespace Board.Channel.Service.DTOs;
+public abstract class IChannelDto
+{
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public byte[] Logo { get; set; } = null!;
+    public ChannelType Type { get; set; }
+    public Guid CreatorId { get; set; }
+    public List<Guid> Members { get; set; } = new();
+    public List<Guid> Notices { get; set; } = new();
+}
