@@ -3,6 +3,7 @@ using Board.User.Service.Models;
 using Board.User.Service.Password;
 using Board.User.Service.PasswordService.Interfaces;
 using Board.User.Service.Settings;
+using Board.Common.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddMongo()
                 .AddPersistence<User>("User");
+builder.Services.AddMassTransitWithRabbitMQ();
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddAuth();
