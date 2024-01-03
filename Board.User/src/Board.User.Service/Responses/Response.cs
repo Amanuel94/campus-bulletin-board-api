@@ -1,15 +1,15 @@
-namespace Board.Common.Responses;
-public class Response<T>
+namespace Board.User.Service.Response;
+public class CommonResponse<T>
 {
     public  bool IsSuccess { get; set; }
     public  string Message { get; set; } = null!;
     public  T Data { get; set; } = default!;
     public List<string> Errors { get; set; } = new List<string>();
 
-    public static Response<T> Success(T data)
+    public static CommonResponse<T> Success(T data)
     {
 
-        return new Response<T>
+        return new CommonResponse<T>
         {
             IsSuccess = true,
             Data = data
@@ -17,10 +17,10 @@ public class Response<T>
 
     }
 
-    public static Response<T> Fail(string msg, List<string> errors)
+    public static CommonResponse<T> Fail(string msg, List<string> errors)
     {
 
-        return new Response<T>
+        return new CommonResponse<T>
         {
             IsSuccess = false,
             Message = msg,
