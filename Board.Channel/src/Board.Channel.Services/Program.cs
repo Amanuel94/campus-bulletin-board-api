@@ -1,6 +1,6 @@
-// using Board.Channel.Service.Model;
-// using Board.Common.Mongo;
+using Board.Common.Mongo;
 using Board.User.Service.Settings;
+// using Board.Channel.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddMongo().AddPersistence<Channel>("channels");
+builder.Services.AddMongo()
+                .AddPersistence<Board.Channel.Service.Model.Channel>("channels")
+                .AddPersistence<Board.Channel.Service.Model.UserItem>("userItem");
+
 builder.Services.AddAuth();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSwaggerGen();

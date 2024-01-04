@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Board.Channel.Services.props" />
+</Project>
