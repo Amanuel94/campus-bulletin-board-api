@@ -23,7 +23,7 @@ public class UserItemCreated : IConsumer<UserCreated>
         {
             return;
         }
-
+        // Console.WriteLine("UserItemCreated");
         await _userItemRepository.CreateAsync(_mapper.Map<UserItem>(message));
         return;
 

@@ -5,6 +5,7 @@ using Board.Common.Interfaces;
 using Board.Channel.Service.Jwt.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 namespace Board.Channel.Service.Controllers;
 
 [Authorize]
@@ -13,14 +14,16 @@ namespace Board.Channel.Service.Controllers;
 public class ChannelController : ControllerBase
 {
     private readonly IGenericRepository<Model.Channel> _channelRepository;
+    private readonly IGenericRepository<Model.UserItem> _userItemRepository;
     private readonly IMapper _mapper;
     private readonly IJwtService _jwtService;
 
-    public ChannelController(IGenericRepository<Model.Channel> channelRepository, IMapper mapper, IJwtService jwtService)
+    public ChannelController(IGenericRepository<Model.Channel> channelRepository, IMapper mapper, IJwtService jwtService, IGenericRepository<Model.UserItem> userItemRepository)
     {
         _channelRepository = channelRepository;
         _mapper = mapper;
         _jwtService = jwtService;
+        _userItemRepository = userItemRepository;
     }
 
     [HttpGet]
@@ -61,7 +64,15 @@ public class ChannelController : ControllerBase
     {
         var identityProvider = new IdentityProvider(HttpContext, _jwtService);
         createChannelDto.CreatorId = identityProvider.GetUserId();
+        createChannelDto.Members = new List<Guid> { identityProvider.GetUserId() };
+        createChannelDto.JoinDates = new Dictionary<string, DateTime> { { identityProvider.GetUserId().ToString(), DateTime.Now } };
+        createChannelDto.LeaveDates = new Dictionary<string, DateTime>();
+
+
         var channel = _mapper.Map<Model.Channel>(createChannelDto);
+        channel.CreatedDate = DateTime.Now;
+        channel.ModifiedDate = DateTime.Now;
+
         await _channelRepository.CreateAsync(channel);
         return CreatedAtAction(nameof(GetChannelById), new { id = channel.Id }, channel);
     }
@@ -81,6 +92,7 @@ public class ChannelController : ControllerBase
             return Unauthorized(CommonResponse<GeneralChannelDto>.Fail("Unauthorized to update the channel", null!));
         }
         _mapper.Map(updateChannelDto, channel);
+        channel.ModifiedDate = DateTime.Now;
         await _channelRepository.UpdateAsync(channel);
         return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
     }
@@ -141,7 +153,7 @@ public class ChannelController : ControllerBase
             return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
         channel.Members.Add(userId);
-        channel.JoinDates.Add(userId, DateTime.Now);
+        channel.JoinDates.Add(userId.ToString(), DateTime.Now);
         await _channelRepository.UpdateAsync(channel);
         return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
     }
@@ -157,9 +169,40 @@ public class ChannelController : ControllerBase
         }
         var userId = new IdentityProvider(HttpContext, _jwtService).GetUserId();
         channel.Members.Remove(userId);
-        channel.LeaveDates.Add(userId, DateTime.Now);
+        channel.LeaveDates.Add(userId.ToString(), DateTime.Now);
         await _channelRepository.UpdateAsync(channel);
         return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
+    }
+
+    [HttpGet("{id}/members")]
+    public async Task<ActionResult<CommonResponse<IEnumerable<MemberDto>>>> GetChannelMembers(Guid id)
+    {
+        var channel = await _channelRepository.GetAsync(id);
+        if (channel == null)
+        {
+            return NotFound(CommonResponse<MemberDto>.Fail("Channel not found", null!));
+        }
+        var members = await _userItemRepository.GetAllAsync(x => channel.Members.Contains(x.Id));
+        var response = CommonResponse<IEnumerable<MemberDto>>.Success(_mapper.Map<IEnumerable<MemberDto>>(members));
+        return Ok(response);
+    }
+
+    [HttpGet("{id}/member")]
+    public async Task<ActionResult<CommonResponse<MemberDto>>> GetMember(Guid id,  [FromQuery] string userName)
+    {
+        var channel = await _channelRepository.GetAsync(id);
+        if (channel == null)
+        {
+            return NotFound(CommonResponse<MemberDto>.Fail("Channel not found", null!));
+        }
+        var member = await _userItemRepository.GetAsync(x => x.UserName.ToLower() == userName.ToLower());
+        if(member == null)
+        {
+            return NotFound(CommonResponse<MemberDto>.Fail("Member not found", null!));
+        }
+        var memberDto = _mapper.Map<MemberDto>(member);
+        var response = CommonResponse<MemberDto>.Success(memberDto);
+        return Ok(response);
     }
 
 }
