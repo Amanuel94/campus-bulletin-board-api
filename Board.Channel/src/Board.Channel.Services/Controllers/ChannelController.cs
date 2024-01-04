@@ -24,33 +24,36 @@ public class ChannelController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response<IEnumerable<GeneralChannelDto>>>> GetAllChannels()
+    public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetAllChannels()
     {
         var channels = await _channelRepository.GetAllAsync();
         var channelsDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
-        var response = Response<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
+        var response = CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
         return Ok(response);
     }
 
-    // [Authorize]
-    // [HttpGet("/auth")]
-    // public async Task<ActionResult<Response<IEnumerable<GeneralChannelDto>>>> Test()
-    // {
-    //     var identityProvider = new IdentityProvider(HttpContext, _jwtService);
-    //     Console.WriteLine(identityProvider.GetUserId());
-    //     return Ok();
-    // }
+    [HttpGet("creator/{id}")]
+    public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetChannelsByCreatorId(Guid id)
+    {
+        var channels = await _channelRepository.GetAllAsync(x => x.CreatorId == id);
+        var channelsDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
+        var response = CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
+        return Ok(response);
+    }
+
+
+
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Response<GeneralChannelDto>>> GetChannelById(Guid id)
+    public async Task<ActionResult<CommonResponse<GeneralChannelDto>>> GetChannelById(Guid id)
     {
         var channel = await _channelRepository.GetAsync(id);
         if (channel == null)
         {
-            return NotFound(Response<GeneralChannelDto>.Fail("Channel not found", null!));
+            return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
         var channelDto = _mapper.Map<GeneralChannelDto>(channel);
-        return Ok(Response<GeneralChannelDto>.Success(channelDto));
+        return Ok(CommonResponse<GeneralChannelDto>.Success(channelDto));
     }
 
     [HttpPost]
@@ -64,22 +67,22 @@ public class ChannelController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Response<GeneralChannelDto>>> UpdateChannel(Guid id, UpdateChannelDto updateChannelDto)
+    public async Task<ActionResult<CommonResponse<GeneralChannelDto>>> UpdateChannel(Guid id, UpdateChannelDto updateChannelDto)
     {
         var channel = await _channelRepository.GetAsync(id);
         var identityProvider = new IdentityProvider(HttpContext, _jwtService);
 
         if (channel == null)
         {
-            return NotFound(Response<GeneralChannelDto>.Fail("Channel not found", null!));
+            return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
         if (channel.CreatorId !=  identityProvider.GetUserId())
         {
-            return Unauthorized(Response<GeneralChannelDto>.Fail("Unauthorized to update the channel", null!));
+            return Unauthorized(CommonResponse<GeneralChannelDto>.Fail("Unauthorized to update the channel", null!));
         }
         _mapper.Map(updateChannelDto, channel);
         await _channelRepository.UpdateAsync(channel);
-        return Ok(Response<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
+        return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
     }
 
     [HttpDelete("{id}")]
@@ -90,39 +93,39 @@ public class ChannelController : ControllerBase
 
         if (channel == null)
         {
-            return NotFound(Response<GeneralChannelDto>.Fail("Channel not found", null!));
+            return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
 
         if (channel.CreatorId !=  identityProvider.GetUserId())
         {
-            return Unauthorized(Response<GeneralChannelDto>.Fail("Unauthorized to delete the channel", null!));
+            return Unauthorized(CommonResponse<GeneralChannelDto>.Fail("Unauthorized to delete the channel", null!));
         }
 
         await _channelRepository.RemoveAsync(channel);
-        return Ok(Response<GeneralChannelDto>.Success(null!));
+        return Ok(CommonResponse<GeneralChannelDto>.Success(null!));
     }
 
 
     [HttpGet("search/{name}")]
-    public async Task<ActionResult<Response<GeneralChannelDto>>> GetChannelByName([FromQuery] string name)
+    public async Task<ActionResult<CommonResponse<GeneralChannelDto>>> GetChannelByName([FromQuery] string name)
     {
         var channel = await _channelRepository.GetAsync(x => x.Name.ToLower() == name.ToLower());
         if (channel == null)
         {
-            return NotFound(Response<GeneralChannelDto>.Fail("Channel not found", null!));
+            return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
         var channelDto = _mapper.Map<GeneralChannelDto>(channel);
-        return Ok(Response<GeneralChannelDto>.Success(channelDto));
+        return Ok(CommonResponse<GeneralChannelDto>.Success(channelDto));
     }
 
     // GET /api/channels/subscribed
     [HttpGet("subscribed")]
-    public async Task<ActionResult<Response<IEnumerable<GeneralChannelDto>>>> GetSubscribedChannels()
+    public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetSubscribedChannels()
     {
         var userId = new IdentityProvider(HttpContext, _jwtService).GetUserId();
         var channels = await _channelRepository.GetAllAsync(x => x.Members.Contains(userId));
         var channelsDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
-        var response = Response<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
+        var response = CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
         return Ok(response);
     }
 
@@ -135,11 +138,12 @@ public class ChannelController : ControllerBase
 
         if (channel == null)
         {
-            return NotFound(Response<GeneralChannelDto>.Fail("Channel not found", null!));
+            return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
         channel.Members.Add(userId);
+        channel.JoinDates.Add(userId, DateTime.Now);
         await _channelRepository.UpdateAsync(channel);
-        return Ok(Response<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
+        return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
     }
 
     // POST /api/channels/unsubscribe/id
@@ -149,12 +153,13 @@ public class ChannelController : ControllerBase
         var channel = await _channelRepository.GetAsync(id);
         if (channel == null)
         {
-            return NotFound(Response<GeneralChannelDto>.Fail("Channel not found", null!));
+            return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
         }
         var userId = new IdentityProvider(HttpContext, _jwtService).GetUserId();
         channel.Members.Remove(userId);
+        channel.LeaveDates.Add(userId, DateTime.Now);
         await _channelRepository.UpdateAsync(channel);
-        return Ok(Response<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
+        return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
     }
 
 }

@@ -11,6 +11,8 @@ public class Channel : BaseEntity
     // public ChannelType Type { get; set; }
     public Guid CreatorId { get; set; }
     public List<Guid> Members { get; set; } = new();
-    public List<Guid> Notices { get; set; } = new();
+    public Dictionary<Guid, DateTime> JoinDates { get; set; }
+    public Dictionary<Guid, DateTime> LeaveDates { get; set; }
+    // public List<Guid> Notices { get; set; } = new();
 
 }
