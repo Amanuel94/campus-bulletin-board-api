@@ -989,6 +989,16 @@
           "lib/net7.0/ZstdSharp.dll": {}
         }
       },
+      "Board.Channel.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Board.Channel.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Board.Channel.Contracts.dll": {}
+        }
+      },
       "Board.User.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -2864,6 +2874,11 @@
         "zstdsharp.port.nuspec"
       ]
     },
+    "Board.Channel.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Board.Channel.Contracts/Board.Channel.Contracts.csproj",
+      "msbuildProject": "../Board.Channel.Contracts/Board.Channel.Contracts.csproj"
+    },
     "Board.User.Contracts/1.0.0": {
       "type": "project",
       "path": "../../../Board.User/src/Board.User.Contracts/Board.User.Contracts.csproj",
@@ -2873,6 +2888,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.1",
+      "Board.Channel.Contracts >= 1.0.0",
       "Board.Common.Service >= 1.0.7",
       "Board.User.Contracts >= 1.0.0",
       "MassTransit.AspNetCore >= 7.3.1",
@@ -2911,6 +2927,9 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
+            "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Contracts/Board.Channel.Contracts.csproj": {
+              "projectPath": "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Contracts/Board.Channel.Contracts.csproj"
+            },
             "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.User/src/Board.User.Contracts/Board.User.Contracts.csproj": {
               "projectPath": "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.User/src/Board.User.Contracts/Board.User.Contracts.csproj"
             }

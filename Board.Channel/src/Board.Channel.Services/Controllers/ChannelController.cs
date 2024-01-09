@@ -5,6 +5,8 @@ using Board.Common.Interfaces;
 using Board.Channel.Service.Jwt.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MassTransit;
+using Board.Channel.Contracts;
 
 namespace Board.Channel.Service.Controllers;
 
@@ -17,13 +19,15 @@ public class ChannelController : ControllerBase
     private readonly IGenericRepository<Model.UserItem> _userItemRepository;
     private readonly IMapper _mapper;
     private readonly IJwtService _jwtService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public ChannelController(IGenericRepository<Model.Channel> channelRepository, IMapper mapper, IJwtService jwtService, IGenericRepository<Model.UserItem> userItemRepository)
+    public ChannelController(IGenericRepository<Model.Channel> channelRepository, IMapper mapper, IJwtService jwtService, IGenericRepository<Model.UserItem> userItemRepository, IPublishEndpoint publishEndpoint)
     {
         _channelRepository = channelRepository;
         _mapper = mapper;
         _jwtService = jwtService;
         _userItemRepository = userItemRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     [HttpGet]
@@ -74,6 +78,7 @@ public class ChannelController : ControllerBase
         channel.ModifiedDate = DateTime.Now;
 
         await _channelRepository.CreateAsync(channel);
+        await _publishEndpoint.Publish(_mapper.Map<ChannelCreated>(channel));
         return CreatedAtAction(nameof(GetChannelById), new { id = channel.Id }, channel);
     }
 
@@ -114,6 +119,7 @@ public class ChannelController : ControllerBase
         }
 
         await _channelRepository.RemoveAsync(channel);
+        await _publishEndpoint.Publish(_mapper.Map<ChannelDeleted>(channel));
         return Ok(CommonResponse<GeneralChannelDto>.Success(null!));
     }
 

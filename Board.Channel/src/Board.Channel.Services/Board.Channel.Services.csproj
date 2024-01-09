@@ -19,5 +19,7 @@
 
     <ItemGroup>
         <ProjectReference Include="../../../Board.User/src/Board.User.Contracts/Board.User.Contracts.csproj" />
+        <ProjectReference Include="../Board.Channel.Contracts/Board.Channel.Contracts.csproj" />
+
     </ItemGroup>
 </Project>

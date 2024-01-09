@@ -73,3 +73,5 @@
 /home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/Microsoft.Extensions.Logging.Abstractions.dll
 /home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/Microsoft.Extensions.Options.dll
 /home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/RabbitMQ.Client.dll
+/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/Board.Channel.Contracts.dll
+/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/Board.Channel.Contracts.pdb

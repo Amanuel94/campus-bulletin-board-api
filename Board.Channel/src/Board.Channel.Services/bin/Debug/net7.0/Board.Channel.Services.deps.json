@@ -9,6 +9,7 @@
       "Board.Channel.Services/1.0.0": {
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
+          "Board.Channel.Contracts": "1.0.0",
           "Board.Common.Service": "1.0.7",
           "Board.User.Contracts": "1.0.0",
           "MassTransit.AspNetCore": "7.3.1",
@@ -552,6 +553,11 @@
           }
         }
       },
+      "Board.Channel.Contracts/1.0.0": {
+        "runtime": {
+          "Board.Channel.Contracts.dll": {}
+        }
+      },
       "Board.User.Contracts/1.0.0": {
         "runtime": {
           "Board.User.Contracts.dll": {}
@@ -984,6 +990,11 @@
       "sha512": "sha512-U9Ix4l4cl58Kzz1rJzj5hoVTjmbx1qGMwzAcbv1j/d3NzrFaESIurQyg+ow4mivCgkE3S413y+U9k4WdnEIkRA==",
       "path": "zstdsharp.port/0.7.3",
       "hashPath": "zstdsharp.port.0.7.3.nupkg.sha512"
+    },
+    "Board.Channel.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Board.User.Contracts/1.0.0": {
       "type": "project",

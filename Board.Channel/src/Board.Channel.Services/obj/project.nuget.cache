@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "XDK4EfaDLm6FN2UAZ+kDr7XLFx019yVTp6A5oyxesFVAp0FIFluQ14sAK7fg9tktdnvJI2bkoyI1WGOZ8rXSJg==",
+  "dgSpecHash": "fmiEWpkGmYIJgWkEW4m+NwxDpdlof+cwX4usiKZfqCzGnkvKAblYSmHOCmwdzLFdqvxg39mHDzm1XVcUQ2YwmA==",
   "success": true,
   "projectFilePath": "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/Board.Channel.Services.csproj",
   "expectedPackageFiles": [
