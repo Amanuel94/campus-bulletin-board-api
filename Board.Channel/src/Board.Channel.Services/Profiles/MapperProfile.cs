@@ -15,5 +15,6 @@ public class MapperProfile : Profile
 
         CreateMap<UserCreated, UserItem>().ReverseMap();
         CreateMap<UserUpdated, UserItem>().ReverseMap();
+        CreateMap<MemberDto, UserItem>().ReverseMap();
     }
 }

@@ -20,14 +20,14 @@ namespace Board.Common.RabbitMQ
                     var rabbitMQSettings = configuration!.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
                     var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
 
-                    // Console.WriteLine($"RabbitMQ settings: {rabbitMQSettings}");
-                    // Console.WriteLine($"Service settings: {rabbitMQSettings.Host}");
+
                     if (rabbitMQSettings == null || string.IsNullOrEmpty(rabbitMQSettings.Host))
                     {
                         throw new Exception("RabbitMQ settings are not properly configured.");
                     }
 
                     configurator.Host(rabbitMQSettings.Host);
+                    configurator.UseJsonSerializer();
                     configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings!.ServiceName, false));
                 });
             });

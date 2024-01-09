@@ -182,6 +182,7 @@ public class ChannelController : ControllerBase
         {
             return NotFound(CommonResponse<MemberDto>.Fail("Channel not found", null!));
         }
+
         var members = await _userItemRepository.GetAllAsync(x => channel.Members.Contains(x.Id));
         var response = CommonResponse<IEnumerable<MemberDto>>.Success(_mapper.Map<IEnumerable<MemberDto>>(members));
         return Ok(response);

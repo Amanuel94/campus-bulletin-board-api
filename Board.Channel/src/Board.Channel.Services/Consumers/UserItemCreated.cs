@@ -19,12 +19,16 @@ public class UserItemCreated : IConsumer<UserCreated>
     {
         var message = context.Message;
         var userItem = await _userItemRepository.GetAsync(message.Id);
+        Console.WriteLine("UserItemCreated");
+        Console.WriteLine(message.Id);
         if(userItem != null)
         {
             return;
         }
         // Console.WriteLine("UserItemCreated");
-        await _userItemRepository.CreateAsync(_mapper.Map<UserItem>(message));
+        var user = _mapper.Map<UserItem>(message);
+        user.Id = message.Id;
+        await _userItemRepository.CreateAsync(user);
         return;
 
     }
