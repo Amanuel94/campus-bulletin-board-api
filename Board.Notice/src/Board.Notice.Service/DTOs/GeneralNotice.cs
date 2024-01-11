@@ -7,7 +7,7 @@ public class GeneralNoticeDto
     public Guid Id;
     public string Title { get; set; } = null!;
     public string Body { get; set; } = null!;
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
     public required List<string> Resources { get; set; }
     public required List<Category> Categories { get; set; }
     public Importance Importance { get; set; }

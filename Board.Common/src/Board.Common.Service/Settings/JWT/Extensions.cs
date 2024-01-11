@@ -7,13 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace Board.User.Service.Settings;
+namespace Board.Common.Settings;
 
 public static class Extensions
 {
     private static JWTSettings? _jwtSettings;
 
-    public static IServiceCollection AddAuth(this IServiceCollection services)
+    public static IServiceCollection AddIdentityAuth(this IServiceCollection services)
     {
 
         var configuration = services.BuildServiceProvider().GetService<IConfiguration>();

@@ -19,8 +19,6 @@ public class UserItemCreated : IConsumer<UserCreated>
     {
         var message = context.Message;
         var userItem = await _userItemRepository.GetAsync(message.Id);
-        Console.WriteLine("UserItemCreated");
-        Console.WriteLine(message.Id);
         if(userItem != null)
         {
             return;

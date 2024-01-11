@@ -4,7 +4,7 @@ namespace Board.Notice.Service.Policies
 {
     public class ChannelCreatorRequirement : IAuthorizationRequirement
     {
-        public Guid ChannelId { get; }
+        public Guid ChannelId { get; set;}
         public ChannelCreatorRequirement(Guid channelId)
         {
             ChannelId = channelId;

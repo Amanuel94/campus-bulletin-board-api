@@ -1,4 +1,5 @@
 using AutoMapper;
+using Board.Channel.Contracts;
 using Board.Notice.Service.DTOs;
 
 namespace Board.Notice.Service.Profiles
@@ -10,6 +11,8 @@ namespace Board.Notice.Service.Profiles
             CreateMap<Model.Notice, GeneralNoticeDto>().ReverseMap();
             CreateMap<Model.Notice, CreateNoticeDto>().ReverseMap();
             CreateMap<Model.Notice, UpdateNoticeDto>().ReverseMap();
+
+            CreateMap<Model.ChannelItem, ChannelCreated>().ReverseMap();
         }
     }
 }

@@ -9,12 +9,16 @@
   <ItemGroup>
     <!-- <PackageReference Include="AutoMapper" Version="12.0.1" /> -->
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Board.Common.Service" Version="1.0.9" />
+    <PackageReference Include="Board.Common.Service" Version="1.0.10" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../../Board.Channel/src/Board.Channel.Contracts/Board.Channel.Contracts.csproj" />
+</ItemGroup>
 
 </Project>

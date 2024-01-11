@@ -29,10 +29,10 @@ public class NoticeController:ControllerBase
     }
 
     [HttpGet("/{noticeId}")]
-    public async Task<IActionResult> GetNoticeAsync(Guid noticeId)
+    public async Task<IActionResult> GetNoticeAsync(Guid channelId, Guid noticeId)
     {
         var notice = await _noticeRepository.GetAsync(noticeId);
-        return Ok(_mapper.Map<GeneralNoticeDto>(notice));
+        return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
     }
 
     [Authorize(Policy = "ChannelCreatorPolicy")]
@@ -40,10 +40,9 @@ public class NoticeController:ControllerBase
     public async Task<IActionResult> CreateNoticeAsync(Guid channelId, [FromBody] CreateNoticeDto createNoticeDto)
     {
         createNoticeDto.ChannelId = channelId;
-
         var notice = _mapper.Map<Model.Notice>(createNoticeDto);
         await _noticeRepository.CreateAsync(notice);
-        return CreatedAtAction(nameof(GetNoticeAsync), new { channelId, noticeId = notice.Id }, notice);
+        return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
     }
 
     [Authorize(Policy = "ChannelCreatorPolicy")]

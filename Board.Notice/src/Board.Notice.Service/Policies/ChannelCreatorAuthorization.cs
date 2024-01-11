@@ -22,14 +22,32 @@ public class ChannelCreatorAuthorizationHandler : AuthorizationHandler<ChannelCr
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ChannelCreatorRequirement requirement)
     {
         var identityProvider = new IdentityProvider(_httpContextAccessor.HttpContext, _jwtService);
-        var userId = identityProvider.GetUserId();
-        if (userId != null)
+
+        if (_httpContextAccessor.HttpContext.Request.RouteValues.TryGetValue("channelId", out object? channelIdValue)
+                && Guid.TryParse(channelIdValue?.ToString(), out Guid channelId))
         {
-            var channel = await _channelRepository.GetAsync(requirement.ChannelId);
-            if (channel != null && channel.CreatorId == userId)
+            // Console.WriteLine(identityProvider.GetUserId());
+            var userId = identityProvider.GetUserId();
+
+            requirement.ChannelId = channelId;
+            Console.WriteLine("ChannelCreatorAuthorizationHandler");
+            Console.WriteLine(channelId);
+            Console.WriteLine(userId);
+            foreach (var item in await _channelRepository.GetAllAsync())
             {
-                context.Succeed(requirement);
+                Console.WriteLine(item.Id);
+            }
+            if (userId != null)
+            {
+                var channel = await _channelRepository.GetAsync(channelId);
+
+                Console.WriteLine(channel);
+                if (channel != null && channel.CreatorId == userId)
+                {
+                    context.Succeed(requirement);
+                }
             }
         }
+
     }
 }

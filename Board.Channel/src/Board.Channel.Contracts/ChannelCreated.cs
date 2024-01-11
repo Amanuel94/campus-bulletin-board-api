@@ -1,7 +1,7 @@
 ﻿namespace Board.Channel.Contracts;
 public class ChannelCreated
 {
-    public Guid Id;
-    public Guid CreatorId;
+    public Guid Id {get; set;}
+    public Guid CreatorId{get; set;}
 
 }

@@ -33,7 +33,19 @@ public class ChannelController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetAllChannels()
     {
+
         var channels = await _channelRepository.GetAllAsync();
+        var channelsDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
+        var response = CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
+        return Ok(response);
+    }
+
+    [HttpGet("admin")]
+    public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetChannelsByAdmin()
+    {
+        var identityProvider = new IdentityProvider(HttpContext, _jwtService);
+        var userId = identityProvider.GetUserId();
+        var channels = await _channelRepository.GetAllAsync(x => x.CreatorId == userId);
         var channelsDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
         var response = CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
         return Ok(response);
@@ -43,10 +55,15 @@ public class ChannelController : ControllerBase
     public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetChannelsByCreatorId(Guid id)
     {
         var channels = await _channelRepository.GetAllAsync(x => x.CreatorId == id);
+        Console.WriteLine(id);
+        Console.WriteLine(new IdentityProvider(HttpContext, _jwtService).GetUserId());
         var channelsDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
         var response = CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelsDto);
         return Ok(response);
     }
+
+
+
 
 
 
@@ -71,14 +88,14 @@ public class ChannelController : ControllerBase
         createChannelDto.Members = new List<Guid> { identityProvider.GetUserId() };
         createChannelDto.JoinDates = new Dictionary<string, DateTime> { { identityProvider.GetUserId().ToString(), DateTime.Now } };
         createChannelDto.LeaveDates = new Dictionary<string, DateTime>();
-
-
         var channel = _mapper.Map<Model.Channel>(createChannelDto);
         channel.CreatedDate = DateTime.Now;
         channel.ModifiedDate = DateTime.Now;
 
         await _channelRepository.CreateAsync(channel);
-        await _publishEndpoint.Publish(_mapper.Map<ChannelCreated>(channel));
+        var ch = _mapper.Map<ChannelCreated>(channel);
+        ch.Id = channel.Id;
+        await _publishEndpoint.Publish(ch);
         return CreatedAtAction(nameof(GetChannelById), new { id = channel.Id }, channel);
     }
 
