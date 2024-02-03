@@ -14,12 +14,15 @@ public class NoticeController:ControllerBase
 {
     private readonly IGenericRepository<Model.Notice> _noticeRepository;
     private readonly IMapper _mapper;
+    private readonly NotificationClient _notificationClient;
 
-    public NoticeController(IGenericRepository<Model.Notice> noticeRepository, IMapper mapper)
+    public NoticeController(IGenericRepository<Model.Notice> noticeRepository, IMapper mapper, NotificationClient notificationClient)
     {
         _noticeRepository = noticeRepository;
         _mapper = mapper;
+        _notificationClient = notificationClient;
     }
+
 
     [HttpGet]
     public async Task<ActionResult<CommonResponse<List<GeneralNoticeDto>>>> GetNoticesAsync(Guid channelId)
@@ -41,7 +44,10 @@ public class NoticeController:ControllerBase
     {
         createNoticeDto.ChannelId = channelId;
         var notice = _mapper.Map<Model.Notice>(createNoticeDto);
-        await _noticeRepository.CreateAsync(notice);
+        // await _noticeRepository.CreateAsync(notice);
+        Console.WriteLine("Sending notification");
+        await _notificationClient.SendNotification(channelId.ToString(), "A new notice has been posted.");
+
         return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
     }
 

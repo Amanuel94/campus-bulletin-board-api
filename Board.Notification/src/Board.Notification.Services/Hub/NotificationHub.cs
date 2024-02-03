@@ -11,7 +11,8 @@ public class NotificationHub : Hub<INotificationClient>
     {
         foreach (string channel in channels)
         {
-            await Groups.AddToGroupAsync(channel, Context.ConnectionId);
+            Console.WriteLine("Joining group: " + channel);
+            await Groups.AddToGroupAsync(Context.ConnectionId, channel);
         }
     }
 
@@ -22,7 +23,8 @@ public class NotificationHub : Hub<INotificationClient>
 
     public async Task SendNotification(Services.Notification notification)
     {
-        await Clients.Group(notification.ChannelId).ReceiveNotification(notification);
+        Console.WriteLine("Notification received");
+        await Clients.Group(notification.ChannelId).ReceiveNotification(notification.Content);
     }
 
 }

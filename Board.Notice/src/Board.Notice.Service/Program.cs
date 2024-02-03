@@ -8,6 +8,8 @@ using Board.Notice.Service.Policies;
 using Board.User.Service.Settings;
 // using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Polly;
+using Polly.Timeout;
 // using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +44,30 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
+// builder.Services.AddSingleton<NotificationClient>();
+
+var seed = new Random();
+builder.Services.AddHttpClient<NotificationClient>(client =>{
+    client.BaseAddress = new Uri(builder.Configuration["NotificationServiceUrl"]!);
+}
+).ConfigurePrimaryHttpMessageHandler(_ => {
+    var clientHandler = new HttpClientHandler();
+    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+
+    return clientHandler;
+
+}).AddTransientHttpErrorPolicy(builder => builder.Or<TimeoutRejectedException>().WaitAndRetryAsync(
+    5,
+    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(seed.Next(0, 1000))
+  ))
+.AddTransientHttpErrorPolicy(builder => builder.Or<TimeoutRejectedException>().CircuitBreakerAsync(
+    3,
+    TimeSpan.FromSeconds(15)
+))
+.AddPolicyHandler(Polly.Policy.TimeoutAsync<HttpResponseMessage>(1));
+
+
 builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddSingleton<IAuthorizationHandler, ChannelCreatorAuthorizationHandler>();
 
