@@ -16,7 +16,7 @@ namespace Board.Notification.Services.Controllers
         }
 
         [HttpPost]
-        public IActionResult Notify(Guid channel, string message)
+        public IActionResult Notify(string channel, string message)
         {
             try{
                 var connection = HubConnectionBuilder();
