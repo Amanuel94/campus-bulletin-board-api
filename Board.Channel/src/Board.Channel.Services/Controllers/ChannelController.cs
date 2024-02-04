@@ -1,13 +1,17 @@
 using AutoMapper;
 using Board.Channel.Service.DTOs;
-using Board.Channel.Service.Jwt;
+// using Board.Channel.Service.Jwt;
 using Board.Common.Interfaces;
-using Board.Channel.Service.Jwt.Interfaces;
+// using Board.Channel.Service.Jwt.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MassTransit;
 using Board.Channel.Contracts;
 using Board.Channel.Services.DTOs.Validators;
+using Board.Common.Response;
+using Board.Auth.Service.Jwt;
+using Board.Auth.Jwt;
+using Board.Auth.Jwt.Interfaces;
 
 namespace Board.Channel.Service.Controllers;
 
@@ -101,7 +105,10 @@ public class ChannelController : ControllerBase
         public async Task<IActionResult> CreateChannel(CreateChannelDto createChannelDto)
         {
             var identityProvider = new IdentityProvider(HttpContext, _jwtService);
-            createChannelDto.CreatorId = identityProvider.GetUserId();
+            var userId = identityProvider.GetUserId();
+
+
+            createChannelDto.CreatorId = userId;
             createChannelDto.Members = new List<Guid> { identityProvider.GetUserId() };
             createChannelDto.JoinDates = new Dictionary<string, DateTime> { { identityProvider.GetUserId().ToString(), DateTime.Now } };
             createChannelDto.LeaveDates = new Dictionary<string, DateTime>();
@@ -190,15 +197,15 @@ public class ChannelController : ControllerBase
         /// <param name="name">The name of the channel to retrieve.</param>
         /// <returns>An <see cref="ActionResult"/> containing the channel information.</returns>
         [HttpGet("search/{name}")]
-        public async Task<ActionResult<CommonResponse<GeneralChannelDto>>> GetChannelByName([FromQuery] string name)
+        public async Task<ActionResult<CommonResponse<IEnumerable<GeneralChannelDto>>>> GetChannelByName([FromQuery] string name)
         {
-            var channel = await _channelRepository.GetAsync(x => x.Name.ToLower().Contains(name.ToLower()));
-            if (channel == null)
+            var channels = await _channelRepository.GetAllAsync(x => x.Name.ToLower().Contains(name.ToLower()));
+            if (channels.Count() == 0)
             {
-                return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
+                return NotFound(CommonResponse<IEnumerable<GeneralChannelDto>>.Fail("No channel found", null!));
             }
-            var channelDto = _mapper.Map<GeneralChannelDto>(channel);
-            return Ok(CommonResponse<GeneralChannelDto>.Success(channelDto));
+            var channelDto = _mapper.Map<IEnumerable<GeneralChannelDto>>(channels);
+            return Ok(CommonResponse<IEnumerable<GeneralChannelDto>>.Success(channelDto));
         }
 
         /// <summary>

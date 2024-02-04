@@ -60,15 +60,17 @@
           }
         }
       },
-      "Board.Common.Service/1.0.7": {
+      "Board.Common.Service/1.0.13": {
         "type": "package",
         "dependencies": {
           "MassTransit.AspNetCore": "7.3.1",
           "MassTransit.RabbitMQ": "8.1.2",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.14",
           "Microsoft.Extensions.Configuration": "8.0.0",
           "Microsoft.Extensions.Configuration.Binder": "8.0.0",
           "Microsoft.Extensions.DependencyInjection": "8.0.0",
-          "MongoDB.Driver": "2.23.0"
+          "MongoDB.Driver": "2.23.0",
+          "System.IdentityModel.Tokens.Jwt": "7.0.3"
         },
         "compile": {
           "lib/net7.0/Board.Common.Service.dll": {}
@@ -1143,13 +1145,13 @@
         "tools/uninstall.ps1"
       ]
     },
-    "Board.Common.Service/1.0.7": {
-      "sha512": "vlMHXNkA4zwSEbPOv+z6TCi9F0ZFJS6qGJGo2pQck+lpNkkx4AQiArV8Q6WbE5V3skXV1WQ2DWrCqUNpjEGH0A==",
+    "Board.Common.Service/1.0.13": {
+      "sha512": "IoBfdBIBe3nAdWpyDXXQ6BGH1OTitv9qqyVPp7J78V6Xjq2IWj55k98L/V78+K72iu7j+lWC2mdvEq5B9mKVwQ==",
       "type": "package",
-      "path": "board.common.service/1.0.7",
+      "path": "board.common.service/1.0.13",
       "files": [
         ".nupkg.metadata",
-        "board.common.service.1.0.7.nupkg.sha512",
+        "board.common.service.1.0.13.nupkg.sha512",
         "board.common.service.nuspec",
         "lib/net7.0/Board.Common.Service.dll"
       ]
@@ -2998,7 +3000,7 @@
     "net7.0": [
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.1",
       "Board.Channel.Contracts >= 1.0.0",
-      "Board.Common.Service >= 1.0.7",
+      "Board.Common.Service >= 1.0.13",
       "Board.User.Contracts >= 1.0.0",
       "FluentValidation.AspNetCore >= 11.3.0",
       "MassTransit.AspNetCore >= 7.3.1",
@@ -3062,7 +3064,7 @@
           },
           "Board.Common.Service": {
             "target": "Package",
-            "version": "[1.0.7, )"
+            "version": "[1.0.13, )"
           },
           "FluentValidation.AspNetCore": {
             "target": "Package",

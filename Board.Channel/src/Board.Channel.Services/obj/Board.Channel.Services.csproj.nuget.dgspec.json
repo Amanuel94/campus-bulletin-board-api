@@ -112,7 +112,7 @@
             },
             "Board.Common.Service": {
               "target": "Package",
-              "version": "[1.0.7, )"
+              "version": "[1.0.13, )"
             },
             "FluentValidation.AspNetCore": {
               "target": "Package",

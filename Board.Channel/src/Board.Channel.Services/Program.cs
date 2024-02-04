@@ -1,6 +1,9 @@
 using Board.Common.Mongo;
-using Board.User.Service.Settings;
 using Board.Common.RabbitMQ;
+using Board.Auth.Service.Jwt;
+using Board.Auth.Jwt;
+using Board.Auth.Jwt.Interfaces;
+using Board.Common.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +17,7 @@ builder.Services.AddMongo()
 
 builder.Services.AddMassTransitWithRabbitMQ();
 
-builder.Services.AddAuth();
+builder.Services.AddIdentityAuth();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSwaggerGen();
 

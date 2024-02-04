@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "d/8nKbhkElRERDDwMdxyD6opJ14v1QxYH0+eUQadJEWV05KRlbDhOjSDWMBrjn8dvhW+2JlTRSERnxesL8hjNw==",
+  "dgSpecHash": "DlAvwbI8pBlmSjTdvS+n/8I4WxjbYpsjqJNNXFKx4in25Cp2R5g0Uf4IFxkQKPhNc5xnIqe/Y2m6/eXZPnZi9w==",
   "success": true,
   "projectFilePath": "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/Board.Channel.Services.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,7 @@
     "/home/dirichletian/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.1/automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/awssdk.core/3.7.100.14/awssdk.core.3.7.100.14.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/awssdk.securitytoken/3.7.100.14/awssdk.securitytoken.3.7.100.14.nupkg.sha512",
-    "/home/dirichletian/.nuget/packages/board.common.service/1.0.7/board.common.service.1.0.7.nupkg.sha512",
+    "/home/dirichletian/.nuget/packages/board.common.service/1.0.13/board.common.service.1.0.13.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/fluentvalidation/11.5.1/fluentvalidation.11.5.1.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/fluentvalidation.aspnetcore/11.3.0/fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
