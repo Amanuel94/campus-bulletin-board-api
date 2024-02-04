@@ -1,3 +1,5 @@
+// Purpose: Contains extensions for RabbitMQ.
+
 using Microsoft.Extensions.DependencyInjection;
 using MassTransit;
 using System.Reflection;
@@ -31,8 +33,7 @@ namespace Board.Common.RabbitMQ
                     configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings!.ServiceName, false));
                 });
             });
-                        // services.AddMassTransitHostedService();
-                        return services;
+            return services;
         }
     }
 }

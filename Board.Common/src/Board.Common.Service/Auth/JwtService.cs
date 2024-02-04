@@ -7,14 +7,27 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Board.Auth.Service.Jwt;
 
+/// <summary>
+/// Represents a service for handling JSON Web Tokens (JWT).
+/// </summary>
 public class JwtService : IJwtService
 {
     private readonly JWTSettings _jwtSettings;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="JwtService"/> class.
+    /// </summary>
+    /// <param name="jwtSettings">The JWT settings.</param>
     public JwtService(IOptions<JWTSettings> jwtSettings)
     {
         _jwtSettings = jwtSettings.Value;
     }
+
+    /// <summary>
+    /// Determines whether the specified token is valid.
+    /// </summary>
+    /// <param name="token">The token to validate.</param>
+    /// <returns><c>true</c> if the token is valid; otherwise, <c>false</c>.</returns>
     public bool IsTokenValid(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -38,5 +51,4 @@ public class JwtService : IJwtService
         }
         return true;
     }
-
 }
