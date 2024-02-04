@@ -44,9 +44,9 @@ public class NoticeController:ControllerBase
     {
         createNoticeDto.ChannelId = channelId;
         var notice = _mapper.Map<Model.Notice>(createNoticeDto);
-        // await _noticeRepository.CreateAsync(notice);
+        await _noticeRepository.CreateAsync(notice);
         Console.WriteLine("Sending notification");
-        await _notificationClient.SendNotification(channelId.ToString(), "A new notice has been posted.");
+        await _notificationClient.SendNotification(channelId.ToString(), notice.Id.ToString());
 
         return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
     }
