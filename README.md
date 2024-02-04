@@ -1,4 +1,4 @@
-# Campus-bulletin-board-api
+# Campus-bulletin-board
 
 ## Introduction
 
