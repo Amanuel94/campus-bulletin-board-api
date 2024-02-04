@@ -1,4 +1,4 @@
-# campus-bulletin-board-api
+# Campus-bulletin-board-api
 
 ## Introduction
 
@@ -26,6 +26,6 @@ The project adopts a microservices architecture, strategically chosen to achieve
 
 - Purpose: The Notification microservice is a pivotal component in real-time communication. It handles the distribution of notifications to all members of a channel, ensuring prompt updates and active engagement.
 
-### Communication
+## Communication
 
 The microservices employ a hybrid communication approach, combining synchronous (HTTP requests) and asynchronous (RabbitMQ message broker) methods. Websockets, powered by SignalR, facilitate real-time communication for notices. This architectural blend ensures efficient communication, flexibility, and responsiveness, enhancing theeffectiveness of the Campus Bulletin App.
