@@ -1,8 +1,12 @@
+//purpose
 using Board.Common.Interfaces;
 using Board.Notice.Service.DTOs;
 using Board.Notice.Service.Model;
 using FluentValidation;
 
+/// <summary>
+/// Validator class for validating the CreateNoticeDto object.
+/// </summary>
 public class CreateNoticeValidator : AbstractValidator<CreateNoticeDto>
 {
     private readonly IGenericRepository<ChannelItem> _channelRepository;
@@ -28,9 +32,6 @@ public class CreateNoticeValidator : AbstractValidator<CreateNoticeDto>
                 return Enum.IsDefined(typeof(Category), x);
             }).WithMessage("Category is invalid."));
 
-        RuleFor(dto => dto.Importance)
-            .NotEmpty().WithMessage("Importance is required.")
-            .Must(x => Enum.IsDefined(typeof(Importance), x)).WithMessage("Importance is invalid.");
 
         RuleFor(dto => dto.Issuer)
             .NotEmpty().WithMessage("Issuer is required.")

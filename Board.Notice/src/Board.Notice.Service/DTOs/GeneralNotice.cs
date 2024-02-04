@@ -4,7 +4,7 @@ namespace Board.Notice.Service.DTOs;
 
 public class GeneralNoticeDto
 {
-    public Guid Id;
+    public Guid Id { get; set; }
     public string Title { get; set; } = null!;
     public string Body { get; set; } = null!;
     public DateOnly Date { get; set; }

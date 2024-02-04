@@ -54,10 +54,11 @@ namespace Board.Notice.Service.Controllers
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="noticeId">The notice identifier.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response with the notice.</returns>
-        [HttpGet("/{noticeId}")]
-        public async Task<IActionResult> GetNoticeAsync(Guid channelId, Guid noticeId)
+        [HttpGet("id")]
+        public async Task<IActionResult> GetNoticeAsync(Guid channelId, [FromQuery] string noticeId)
         {
-            var notice = await _noticeRepository.GetAsync(noticeId);
+            var id = Guid.Parse(noticeId);
+            var notice = await _noticeRepository.GetAsync(id);
             return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
         }
 
@@ -80,6 +81,7 @@ namespace Board.Notice.Service.Controllers
             var notice = _mapper.Map<Model.Notice>(createNoticeDto);
             await _noticeRepository.CreateAsync(notice);
             await _notificationClient.SendNotification(channelId.ToString(), notice.Id.ToString());
+            // Console.WriteLine(");
 
             return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
         }
