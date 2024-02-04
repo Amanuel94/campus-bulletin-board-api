@@ -2,6 +2,8 @@ using AutoMapper;
 using Board.Common.Interfaces;
 using Board.Common.Response;
 using Board.Notice.Service.DTOs;
+using Board.Notice.Service.DTOs.Validators;
+using Board.Notice.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +18,7 @@ namespace Board.Notice.Service.Controllers
     public class NoticeController : ControllerBase
     {
         private readonly IGenericRepository<Model.Notice> _noticeRepository;
+        private readonly IGenericRepository<ChannelItem> _channelRepository;
         private readonly IMapper _mapper;
         private readonly NotificationClient _notificationClient;
 
@@ -25,9 +28,10 @@ namespace Board.Notice.Service.Controllers
         /// <param name="noticeRepository">The notice repository.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="notificationClient">The notification client.</param>
-        public NoticeController(IGenericRepository<Model.Notice> noticeRepository, IMapper mapper, NotificationClient notificationClient)
+        public NoticeController(IGenericRepository<Model.Notice> noticeRepository, IGenericRepository<ChannelItem> channelRepository, IMapper mapper, NotificationClient notificationClient)
         {
             _noticeRepository = noticeRepository;
+            _channelRepository = channelRepository;
             _mapper = mapper;
             _notificationClient = notificationClient;
         }
@@ -68,6 +72,11 @@ namespace Board.Notice.Service.Controllers
         public async Task<IActionResult> CreateNoticeAsync(Guid channelId, [FromBody] CreateNoticeDto createNoticeDto)
         {
             createNoticeDto.ChannelId = channelId;
+            var validationResult = await new CreateNoticeValidator(_channelRepository).ValidateAsync(createNoticeDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(CommonResponse<GeneralNoticeDto>.Fail("Input Error", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
+            }
             var notice = _mapper.Map<Model.Notice>(createNoticeDto);
             await _noticeRepository.CreateAsync(notice);
             await _notificationClient.SendNotification(channelId.ToString(), notice.Id.ToString());
@@ -88,6 +97,12 @@ namespace Board.Notice.Service.Controllers
         {
             updateNoticeDto.ChannelId = channelId;
             updateNoticeDto.Id = noticeId;
+
+            var validationResult = await new UpdateNoticeValidator(_channelRepository, _noticeRepository).ValidateAsync(updateNoticeDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(CommonResponse<GeneralNoticeDto>.Fail("Input Error", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
+            }
             var notice = await _noticeRepository.GetAsync(noticeId);
             if (notice == null)
             {
