@@ -114,6 +114,10 @@
               "target": "Package",
               "version": "[1.0.7, )"
             },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
             "MassTransit.AspNetCore": {
               "target": "Package",
               "version": "[7.3.1, )"

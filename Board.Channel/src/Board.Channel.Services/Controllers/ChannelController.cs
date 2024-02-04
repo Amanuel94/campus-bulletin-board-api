@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MassTransit;
 using Board.Channel.Contracts;
+using Board.Channel.Services.DTOs.Validators;
 
 namespace Board.Channel.Service.Controllers;
 
@@ -104,6 +105,14 @@ public class ChannelController : ControllerBase
             createChannelDto.Members = new List<Guid> { identityProvider.GetUserId() };
             createChannelDto.JoinDates = new Dictionary<string, DateTime> { { identityProvider.GetUserId().ToString(), DateTime.Now } };
             createChannelDto.LeaveDates = new Dictionary<string, DateTime>();
+
+            var validator = new CreateChannelDtoValidator(_userItemRepository);
+            var validationResult = await validator.ValidateAsync(createChannelDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(CommonResponse<GeneralChannelDto>.Fail("Input Error", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
+            }
+
             var channel = _mapper.Map<Model.Channel>(createChannelDto);
             channel.CreatedDate = DateTime.Now;
             channel.ModifiedDate = DateTime.Now;
@@ -135,6 +144,14 @@ public class ChannelController : ControllerBase
             {
                 return Unauthorized(CommonResponse<GeneralChannelDto>.Fail("Unauthorized to update the channel", null!));
             }
+
+            var validator = new UpdateChannelDtoValidator(_userItemRepository);
+            var validationResult = await validator.ValidateAsync(updateChannelDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(CommonResponse<GeneralChannelDto>.Fail("Input Error", validationResult.Errors.Select(x => x.ErrorMessage).ToList()));
+            }
+
             _mapper.Map(updateChannelDto, channel);
             channel.ModifiedDate = DateTime.Now;
             await _channelRepository.UpdateAsync(channel);
@@ -214,7 +231,14 @@ public class ChannelController : ControllerBase
                 return NotFound(CommonResponse<GeneralChannelDto>.Fail("Channel not found", null!));
             }
             channel.Members.Add(userId);
-            channel.JoinDates.Add(userId.ToString(), DateTime.Now);
+            if (!channel.JoinDates.ContainsKey(userId.ToString()))
+            {
+                channel.JoinDates.Add(userId.ToString(), DateTime.Now);
+            }
+            else
+            {
+                channel.JoinDates[userId.ToString()] = DateTime.Now;
+            }
             await _channelRepository.UpdateAsync(channel);
             return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
         }
@@ -234,7 +258,16 @@ public class ChannelController : ControllerBase
             }
             var userId = new IdentityProvider(HttpContext, _jwtService).GetUserId();
             channel.Members.Remove(userId);
-            channel.LeaveDates.Add(userId.ToString(), DateTime.Now);
+
+            if (channel.LeaveDates.ContainsKey(userId.ToString()))
+            {
+                channel.LeaveDates[userId.ToString()] = DateTime.Now;
+            }
+            else
+            {
+                channel.LeaveDates.Add(userId.ToString(), DateTime.Now);
+            }
+
             await _channelRepository.UpdateAsync(channel);
             return Ok(CommonResponse<GeneralChannelDto>.Success(_mapper.Map<GeneralChannelDto>(channel)));
         }

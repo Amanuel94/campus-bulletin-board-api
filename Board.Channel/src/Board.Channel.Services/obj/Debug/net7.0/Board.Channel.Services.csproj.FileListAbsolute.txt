@@ -75,3 +75,6 @@
 /home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/RabbitMQ.Client.dll
 /home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/Board.Channel.Contracts.dll
 /home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/Board.Channel.Contracts.pdb
+/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/FluentValidation.dll
+/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/FluentValidation.AspNetCore.dll
+/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/bin/Debug/net7.0/FluentValidation.DependencyInjectionExtensions.dll

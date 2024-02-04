@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jnviwNp/vXfmamYdEOHoo+h1tZX0JjfPgLsQlpzxU+rU69v8FnslLlaebHmt18F2lwIfpkdHbmyQff0W7sOdHA==",
+  "dgSpecHash": "d/8nKbhkElRERDDwMdxyD6opJ14v1QxYH0+eUQadJEWV05KRlbDhOjSDWMBrjn8dvhW+2JlTRSERnxesL8hjNw==",
   "success": true,
   "projectFilePath": "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.Channel/src/Board.Channel.Services/Board.Channel.Services.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,9 @@
     "/home/dirichletian/.nuget/packages/awssdk.securitytoken/3.7.100.14/awssdk.securitytoken.3.7.100.14.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/board.common.service/1.0.7/board.common.service.1.0.7.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
+    "/home/dirichletian/.nuget/packages/fluentvalidation/11.5.1/fluentvalidation.11.5.1.nupkg.sha512",
+    "/home/dirichletian/.nuget/packages/fluentvalidation.aspnetcore/11.3.0/fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "/home/dirichletian/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.5.1/fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/masstransit/8.1.2/masstransit.8.1.2.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/masstransit.abstractions/8.1.2/masstransit.abstractions.8.1.2.nupkg.sha512",
     "/home/dirichletian/.nuget/packages/masstransit.aspnetcore/7.3.1/masstransit.aspnetcore.7.3.1.nupkg.sha512",
