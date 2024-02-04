@@ -1,3 +1,4 @@
+// Purpose: Implementation of the JwtService class for handling JSON Web Tokens (JWT).
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Board.Channel.Service.Jwt.Interfaces;
@@ -7,14 +8,27 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Board.User.Service.Jwt;
 
+/// <summary>
+/// Represents a service for handling JSON Web Tokens (JWT).
+/// </summary>
 public class JwtService : IJwtService
 {
     private readonly JWTSettings _jwtSettings;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="JwtService"/> class.
+    /// </summary>
+    /// <param name="jwtSettings">The JWT settings.</param>
     public JwtService(IOptions<JWTSettings> jwtSettings)
     {
         _jwtSettings = jwtSettings.Value;
     }
+
+    /// <summary>
+    /// Validates the given JWT token.
+    /// </summary>
+    /// <param name="token">The JWT token to validate.</param>
+    /// <returns><c>true</c> if the token is valid; otherwise, <c>false</c>.</returns>
     public bool IsTokenValid(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -38,5 +52,4 @@ public class JwtService : IJwtService
         }
         return true;
     }
-
 }

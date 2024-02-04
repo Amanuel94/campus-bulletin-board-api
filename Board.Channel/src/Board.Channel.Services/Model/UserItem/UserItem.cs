@@ -1,3 +1,4 @@
+// Purpose: Model for UserItem that mirrors the UserItem entity in the database.
 using Board.Common.Models;
 
 namespace Board.Channel.Service.Model;
