@@ -1,3 +1,35 @@
+//
+// Purpose: This file contains the CreateUserDtoValidator class which is used to validate the CreateUserDto class.
+//
+// The CreateUserDtoValidator class is responsible for validating the properties of the CreateUserDto class, which represents the data required to create a new user.
+// It inherits from the UserDataValidator class, which provides common validation rules for user data.
+//
+// The CreateUserDtoValidator constructor takes an instance of IGenericRepository<Models.User> as a parameter, which is used to check if a user with the same username or email already exists in the repository.
+//
+// The validation rules for the CreateUserDto properties are defined using the FluentValidation library. The rules include:
+// - PasswordHash: It must not be empty, not null, have a minimum length of 8 characters, and a maximum length of 20 characters.
+// - UserName: It must not be empty, have a maximum length of 50 characters, a minimum length of 8 characters, not contain spaces, and must be unique in the repository.
+// - Email: It must not be empty, be a valid email address, and must be unique in the repository.
+// - CreatedDate: It must not be empty or null.
+// - ModifiedDate: It must not be empty or null.
+//
+// If any of the validation rules fail, an appropriate error message is generated.
+//
+// Example usage:
+// var userRepository = new UserRepository();
+// var validator = new CreateUserDtoValidator(userRepository);
+// var validationResult = validator.Validate(createUserDto);
+// if (!validationResult.IsValid)
+// {
+//     foreach (var error in validationResult.Errors)
+//     {
+//         Console.WriteLine(error.ErrorMessage);
+//     }
+// }
+//
+// Note: This code assumes the existence of the UserDataValidator and Models.User classes, as well as the IGenericRepository interface and its implementation.
+// Purpose: This file contains the CreateUserDtoValidator class which is used to validate the CreateUserDto class.
+
 using Board.Common.Interfaces;
 using FluentValidation;
 
@@ -22,7 +54,7 @@ public class CreateUserDtoValidator : UserDataValidator<CreateUserDto>
                                 .Must(x => !x.Contains(" ")).WithMessage("Username cannot contain spaces.")
                                 .MustAsync(async (userName, cancellationToken) =>
                                 {
-                                    var user = await _userRepository.GetAsync(x=> x.UserName == userName);
+                                    var user = await _userRepository.GetAsync(x => x.UserName == userName);
                                     return user == null;
                                 }).WithMessage("Username already exists.");
 
@@ -30,7 +62,7 @@ public class CreateUserDtoValidator : UserDataValidator<CreateUserDto>
                                 .EmailAddress().WithMessage("Email is not valid.")
                                 .MustAsync(async (email, cancellationToken) =>
                                 {
-                                    var user = await _userRepository.GetAsync(x=> x.Email == email);
+                                    var user = await _userRepository.GetAsync(x => x.Email == email);
                                     return user == null;
                                 }).WithMessage("Email already exists.");
 

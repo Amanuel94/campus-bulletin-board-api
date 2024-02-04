@@ -1,3 +1,35 @@
+//
+// Purpose: This file contains the validator for the user data transfer object.
+//
+// The `UserDataValidator` class is responsible for validating the properties of a user data transfer object (DTO).
+// It inherits from the `AbstractValidator<T>` class, where `T` is a type that implements the `IUserDto` interface.
+//
+// The validator defines rules for each property of the DTO using the `RuleFor` method from the FluentValidation library.
+// The rules ensure that the properties meet certain criteria, such as not being empty, not exceeding a maximum length,
+// having a valid email format, and being a valid department value.
+//
+// The `UserDataValidator` class is used to validate user data before it is processed or stored in the system.
+//
+// Example usage:
+// UserDataValidator<UserDto> validator = new UserDataValidator<UserDto>();
+// ValidationResult result = validator.Validate(userDto);
+// if (!result.IsValid)
+// {
+//     // Handle validation errors
+// }
+//
+// Note: The `UserDataValidator` class is generic, allowing it to be used with different types of user DTOs.
+// The type parameter `T` must implement the `IUserDto` interface.
+//
+// Dependencies:
+// - Board.User.Service.Models
+// - FluentValidation
+//
+// See also:
+// - IUserDto: Interface representing a user data transfer object
+// - AbstractValidator<T>: Base class for creating validators using FluentValidation
+// Purpose: This file contains the validator for the user data transfer object.
+
 using Board.User.Service.Models;
 using FluentValidation;
 

@@ -34,6 +34,7 @@ public class UsersController : ControllerBase
         _publishEndpoint = publishEndpoint;
     }
 
+    // Gets the list of all users
     [HttpGet]
     public async Task<ActionResult<CommonResponse<IReadOnlyCollection<GeneralUserDto>>>> GetUsersAsync()
     {
@@ -41,6 +42,7 @@ public class UsersController : ControllerBase
         return Ok(CommonResponse<IReadOnlyCollection<GeneralUserDto>>.Success(_mapper.Map<IReadOnlyCollection<GeneralUserDto>>(users)));
     }
 
+    //Gets the information about the user with a particular ID
     [HttpGet("{id}")]
     public async Task<ActionResult<CommonResponse<GeneralUserDto>>> GetUserAsync(Guid id)
     {
@@ -53,6 +55,19 @@ public class UsersController : ControllerBase
         return Ok(CommonResponse<GeneralUserDto>.Success(_mapper.Map<GeneralUserDto>(user)));
     }
 
+    //Gets the id of the current user
+    [Authorize]
+    [HttpGet("id")]
+    public ActionResult<CommonResponse<string>> GetUserIdAsync()
+    {
+
+        var identityProvider = new IdentityProvider(HttpContext, _jwtService);
+        var id = identityProvider.GetUserId();
+        return Ok(CommonResponse<string>.Success(id.ToString()));
+
+    }
+
+    // Registers a new user
     [HttpPost("register")]
     public async Task<ActionResult<GeneralUserDto>> CreateUserAsync([FromBody] CreateUserDto createUserDto)
     {
@@ -74,6 +89,7 @@ public class UsersController : ControllerBase
         return CreatedAtAction(nameof(GetUserAsync), new { id = userDto.Id }, userDto);
     }
 
+    // Updates the information about the user
     [Authorize]
     [HttpPut()]
     public async Task<ActionResult<CommonResponse<GeneralUserDto>>> UpdateUserAsync([FromBody] UpdateUserDto updateUserDto)
@@ -101,7 +117,7 @@ public class UsersController : ControllerBase
         return Ok(CommonResponse<GeneralUserDto>.Success(_mapper.Map<GeneralUserDto>(user)));
     }
 
-
+    //  Deletes the user
     [Authorize]
     [HttpDelete()]
     public async Task<ActionResult> DeleteUserAsync()
@@ -119,6 +135,7 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
+    //  Logs in the user
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult<CommonResponse<LoginResponseDto>>> LoginAsync(LoginRequestDto loginRequestDto)
@@ -140,6 +157,7 @@ public class UsersController : ControllerBase
         return Ok(CommonResponse<LoginResponseDto>.Success(loginResponseDto));
     }
 
+    //  Changes the password of the user
     [HttpPut]
     [Route("change-password")]
     public async Task<ActionResult<CommonResponse<int>>> ChangePasswordAsync(UpdatePasswordDto updatePasswordDto)

@@ -1,3 +1,4 @@
+// Purpose : The PasswordHasher class is responsible for hashing and verifying passwords using the Rfc2898DeriveBytes algorithm. It provides methods to hash a password and to verify whether a password matches a hashed password.
 using System.Security.Cryptography;
 using Board.User.Service.PasswordService.Interfaces;
 using Board.User.Services.Settings;
@@ -5,15 +6,27 @@ using Microsoft.Extensions.Options;
 
 namespace Board.User.Service.Password
 {
+    /// <summary>
+    /// Provides functionality to hash and verify passwords using the Rfc2898DeriveBytes algorithm.
+    /// </summary>
     public class PasswordHasher : IPasswordHasher
     {
         private readonly IOptions<PasswordHasherSettings> _options;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PasswordHasher"/> class.
+        /// </summary>
+        /// <param name="options">The options for the password hasher.</param>
         public PasswordHasher(IOptions<PasswordHasherSettings> options)
         {
             _options = options;
         }
 
+        /// <summary>
+        /// Hashes the specified password.
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <returns>The hashed password.</returns>
         public string HashPassword(string password)
         {
             using var algorithm = new Rfc2898DeriveBytes(
@@ -29,6 +42,12 @@ namespace Board.User.Service.Password
             return $"{_options.Value.Iterations}.{salt}.{key}";
         }
 
+        /// <summary>
+        /// Verifies whether the specified password matches the hashed password.
+        /// </summary>
+        /// <param name="password">The password to verify.</param>
+        /// <param name="hashedPassword">The hashed password to compare against.</param>
+        /// <returns>True if the password is verified, false otherwise.</returns>
         public bool VerifyPassword(string password, string hashedPassword)
         {
             string[] parts = hashedPassword.Split('.', 3);

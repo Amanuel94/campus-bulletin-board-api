@@ -1,3 +1,4 @@
+// Purpose: This file contains the UpdatePasswordDto class.
 namespace Board.User.Service.DTOs
 {
     public class UpdatePasswordDto : IUserDto

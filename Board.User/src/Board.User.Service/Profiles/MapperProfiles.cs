@@ -1,3 +1,5 @@
+// Purpose: This file contains the mapping profiles for the user service.
+
 using AutoMapper;
 using Board.User.Contracts.Contracts;
 using Board.User.Service.DTOs;

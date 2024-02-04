@@ -1,9 +1,16 @@
+//Purpose: Contains the extension method to add authentication services and JWT configuration to the specified <see cref="IServiceCollection"/>.
+
 using System.Text;
 using Board.User.Service.Jwt;
 using Board.User.Service.Jwt.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
+/// <summary>
+/// Adds authentication services and JWT configuration to the specified <see cref="IServiceCollection"/>.
+/// </summary>
+/// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+/// <returns>The modified <see cref="IServiceCollection"/>.</returns>
 namespace Board.User.Service.Settings;
 
 public static class Extensions

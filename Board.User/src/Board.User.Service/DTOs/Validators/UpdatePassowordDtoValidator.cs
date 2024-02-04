@@ -1,3 +1,5 @@
+// Purpose: This file is used to provide a validator for the UpdatePasswordDto model.
+
 using FluentValidation;
 
 namespace Board.User.Service.DTOs.Validators

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "prvcL6sVljWbpd2cUXPw2NiUNbdSc5fkJI5CoP1M0u/0ejwJIsq0KnXB/7L012bF0CgeGnPHIkZYPlb++6IHkQ==",
+  "dgSpecHash": "/rQjpdGl3O4qK0IJft26eZ3gaKPmb1qVUi9UXS5SuEhKbgcnjM00dYSITllhcB8RwyByqv2JVd6hhXRRUrmkTA==",
   "success": true,
   "projectFilePath": "/home/dirichletian/Documents/Microservices/campus-bulletin-board-api/Board.User/src/Board.User.Service/Board.User.Service.csproj",
   "expectedPackageFiles": [

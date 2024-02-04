@@ -1,3 +1,4 @@
+// Purpose: This file contains the DTO for the User model.
 using Board.User.Service.Models;
 
 namespace Board.User.Service.DTOs;

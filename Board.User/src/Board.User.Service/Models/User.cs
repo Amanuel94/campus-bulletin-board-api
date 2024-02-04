@@ -1,3 +1,4 @@
+//Purspose: This file contains the User model which is used to represent the user entity in the database.
 using Board.Common.Models;
 
 namespace Board.User.Service.Models;

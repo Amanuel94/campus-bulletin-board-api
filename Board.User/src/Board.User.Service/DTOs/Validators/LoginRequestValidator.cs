@@ -1,3 +1,4 @@
+// Purpose: This file contains the validator for the LoginRequestDto. This validator ensures that the username and password are not empty and that the username exists in the database.
 using FluentValidation;
 using Board.Common.Interfaces;
 
