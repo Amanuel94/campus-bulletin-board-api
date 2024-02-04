@@ -5,73 +5,110 @@ using Board.Notice.Service.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Board.Notice.Service.Controllers;
-
-[Authorize]
-[ApiController]
-[Route("api/{channelId}/notices")]
-public class NoticeController:ControllerBase
+namespace Board.Notice.Service.Controllers
 {
-    private readonly IGenericRepository<Model.Notice> _noticeRepository;
-    private readonly IMapper _mapper;
-    private readonly NotificationClient _notificationClient;
-
-    public NoticeController(IGenericRepository<Model.Notice> noticeRepository, IMapper mapper, NotificationClient notificationClient)
+    /// <summary>
+    /// Controller class for managing notices in a specific channel.
+    /// </summary>
+    [Authorize]
+    [ApiController]
+    [Route("api/{channelId}/notices")]
+    public class NoticeController : ControllerBase
     {
-        _noticeRepository = noticeRepository;
-        _mapper = mapper;
-        _notificationClient = notificationClient;
-    }
+        private readonly IGenericRepository<Model.Notice> _noticeRepository;
+        private readonly IMapper _mapper;
+        private readonly NotificationClient _notificationClient;
 
-
-    [HttpGet]
-    public async Task<ActionResult<CommonResponse<List<GeneralNoticeDto>>>> GetNoticesAsync(Guid channelId)
-    {
-        var notices = await _noticeRepository.GetAllAsync(x => x.ChannelId == channelId);
-        return Ok(CommonResponse<List<GeneralNoticeDto>>.Success( _mapper.Map<List<GeneralNoticeDto>>(notices)));
-    }
-
-    [HttpGet("/{noticeId}")]
-    public async Task<IActionResult> GetNoticeAsync(Guid channelId, Guid noticeId)
-    {
-        var notice = await _noticeRepository.GetAsync(noticeId);
-        return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
-    }
-
-    [Authorize(Policy = "ChannelCreatorPolicy")]
-    [HttpPost()]
-    public async Task<IActionResult> CreateNoticeAsync(Guid channelId, [FromBody] CreateNoticeDto createNoticeDto)
-    {
-        createNoticeDto.ChannelId = channelId;
-        var notice = _mapper.Map<Model.Notice>(createNoticeDto);
-        await _noticeRepository.CreateAsync(notice);
-        Console.WriteLine("Sending notification");
-        await _notificationClient.SendNotification(channelId.ToString(), notice.Id.ToString());
-
-        return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
-    }
-
-    [Authorize(Policy = "ChannelCreatorPolicy")]
-    [HttpPut("{noticeId}")]
-    public async Task<ActionResult<CommonResponse<GeneralNoticeDto>>> UpdateNoticeAsync(Guid channelId, Guid noticeId, [FromBody] UpdateNoticeDto updateNoticeDto)
-    {
-        updateNoticeDto.ChannelId = channelId;
-        updateNoticeDto.Id = noticeId;
-        var notice = await _noticeRepository.GetAsync(noticeId);
-        if (notice == null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoticeController"/> class.
+        /// </summary>
+        /// <param name="noticeRepository">The notice repository.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="notificationClient">The notification client.</param>
+        public NoticeController(IGenericRepository<Model.Notice> noticeRepository, IMapper mapper, NotificationClient notificationClient)
         {
-            return NotFound();
+            _noticeRepository = noticeRepository;
+            _mapper = mapper;
+            _notificationClient = notificationClient;
         }
-        await _noticeRepository.UpdateAsync(_mapper.Map<Model.Notice>(updateNoticeDto));
-        return NoContent();
-    }
 
-    [Authorize(Policy = "ChannelCreatorPolicy")]
-    [HttpDelete("{noticeId}")]
-    public async Task<IActionResult> DeleteNoticeAsync(Guid channelId, Guid noticeId)
-    {
-        await _noticeRepository.RemoveAsync(noticeId);
-        return NoContent();
-    }
+        /// <summary>
+        /// Gets the notices for a specific channel.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response with the list of notices.</returns>
+        [HttpGet]
+        public async Task<ActionResult<CommonResponse<List<GeneralNoticeDto>>>> GetNoticesAsync(Guid channelId)
+        {
+            var notices = await _noticeRepository.GetAllAsync(x => x.ChannelId == channelId);
+            return Ok(CommonResponse<List<GeneralNoticeDto>>.Success(_mapper.Map<List<GeneralNoticeDto>>(notices)));
+        }
 
+        /// <summary>
+        /// Gets a specific notice from a channel.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="noticeId">The notice identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response with the notice.</returns>
+        [HttpGet("/{noticeId}")]
+        public async Task<IActionResult> GetNoticeAsync(Guid channelId, Guid noticeId)
+        {
+            var notice = await _noticeRepository.GetAsync(noticeId);
+            return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
+        }
+
+        /// <summary>
+        /// Creates a new notice in a channel. Only channel creator is allowed access.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="createNoticeDto">The create notice DTO.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response with the created notice.</returns>
+        [Authorize(Policy = "ChannelCreatorPolicy")]
+        [HttpPost()]
+        public async Task<IActionResult> CreateNoticeAsync(Guid channelId, [FromBody] CreateNoticeDto createNoticeDto)
+        {
+            createNoticeDto.ChannelId = channelId;
+            var notice = _mapper.Map<Model.Notice>(createNoticeDto);
+            await _noticeRepository.CreateAsync(notice);
+            await _notificationClient.SendNotification(channelId.ToString(), notice.Id.ToString());
+
+            return Ok(CommonResponse<GeneralNoticeDto>.Success(_mapper.Map<GeneralNoticeDto>(notice)));
+        }
+
+        /// <summary>
+        /// Updates an existing notice in a channel. Only Channel creator is allowed access.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="noticeId">The notice identifier.</param>
+        /// <param name="updateNoticeDto">The update notice DTO.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response with the updated notice.</returns>
+        [Authorize(Policy = "ChannelCreatorPolicy")]
+        [HttpPut("{noticeId}")]
+        public async Task<ActionResult<CommonResponse<GeneralNoticeDto>>> UpdateNoticeAsync(Guid channelId, Guid noticeId, [FromBody] UpdateNoticeDto updateNoticeDto)
+        {
+            updateNoticeDto.ChannelId = channelId;
+            updateNoticeDto.Id = noticeId;
+            var notice = await _noticeRepository.GetAsync(noticeId);
+            if (notice == null)
+            {
+                return NotFound();
+            }
+            await _noticeRepository.UpdateAsync(_mapper.Map<Model.Notice>(updateNoticeDto));
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Deletes a notice from a channel. Only channel creator is allowed access.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="noticeId">The notice identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response indicating success or failure.</returns>
+        [Authorize(Policy = "ChannelCreatorPolicy")]
+        [HttpDelete("{noticeId}")]
+        public async Task<IActionResult> DeleteNoticeAsync(Guid channelId, Guid noticeId)
+        {
+            await _noticeRepository.RemoveAsync(noticeId);
+            return NoContent();
+        }
+    }
 }

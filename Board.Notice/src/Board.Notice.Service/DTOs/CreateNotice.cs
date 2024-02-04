@@ -1,3 +1,4 @@
+// Purpose: This file contains the DTO for creating a notice.
 using Board.Notice.Service.Model;
 
 namespace Board.Notice.Service.DTOs;

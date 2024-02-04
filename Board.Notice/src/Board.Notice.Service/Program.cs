@@ -1,4 +1,3 @@
-// using System.Text;
 using Board.Auth.Jwt.Interfaces;
 using Board.Auth.Service.Jwt;
 using Board.Common.Mongo;
@@ -6,33 +5,16 @@ using Board.Common.RabbitMQ;
 using Board.Notice.Service.Model;
 using Board.Notice.Service.Policies;
 using Board.User.Service.Settings;
-// using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Polly;
 using Polly.Timeout;
-// using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddMongo().AddPersistence<ChannelItem>("channelItem").AddPersistence<Notice>("notice");
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuer = true,
-//             ValidateAudience = true,
-//             ValidateLifetime = true,
-//             ValidateIssuerSigningKey = true,
-//             ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
-//             ValidAudience = builder.Configuration["JWTSettings:Audience"],
-//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"]))
-//         };
-//     });
 
 builder.Services.AddIdentityAuth();
 builder.Services.AddAuthorization(options =>
@@ -44,7 +26,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
-// builder.Services.AddSingleton<NotificationClient>();
 
 var seed = new Random();
 builder.Services.AddHttpClient<NotificationClient>(client =>{
