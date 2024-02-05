@@ -1,3 +1,4 @@
+// Purpose: A class to represent the UserCreated event. This event is used to notify other services that a user has been created.
 namespace Board.User.Contracts.Contracts
 {
     public class UserCreated

@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6F213044-E04C-43D4-AF60-7F7EE688D2D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Board.Notification.Services", "src\Board.Notification.Services\Board.Notification.Services.csproj", "{DF899D3C-32D8-4C6E-966E-5051DA31F948}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF899D3C-32D8-4C6E-966E-5051DA31F948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF899D3C-32D8-4C6E-966E-5051DA31F948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF899D3C-32D8-4C6E-966E-5051DA31F948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF899D3C-32D8-4C6E-966E-5051DA31F948}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DF899D3C-32D8-4C6E-966E-5051DA31F948} = {6F213044-E04C-43D4-AF60-7F7EE688D2D9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {049E3B3C-F48D-4502-94DC-0B7A192E6920}
+	EndGlobalSection
+EndGlobal

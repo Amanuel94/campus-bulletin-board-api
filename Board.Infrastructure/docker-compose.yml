@@ -2,6 +2,15 @@
 
 version: "3.8"
 services:
+#   board-user-service:
+#     build:
+#       context: ../Board.User/src/
+#       dockerfile: Dockerfile
+#     ports:
+#       - "5006:80" # Adjust the port mapping as needed
+#     depends_on:
+#       - mongo
+#       - rabbitmq
   mongo:
     image: mongo
     container_name: mongodb

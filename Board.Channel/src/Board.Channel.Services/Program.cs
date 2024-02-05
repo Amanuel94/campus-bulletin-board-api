@@ -1,4 +1,4 @@
-using Board.Common.Mongo;
+cusing Board.Common.Mongo;
 using Board.Common.RabbitMQ;
 using Board.Auth.Service.Jwt;
 using Board.Auth.Jwt;
